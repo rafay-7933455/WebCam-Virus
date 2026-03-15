@@ -70,31 +70,20 @@
                <button class="col btn btn-success" id="enter">Enter</button>
                <button class="col btn btn-warning" id="clear">Clear</button>
           </div>
-
      </div>
 
      <script>
-
           let display = document.getElementById("display");
           let output = document.getElementById("output");
-
           let expression = "";
-
-          /* number buttons */
-
           document.querySelectorAll(".num").forEach(btn => {
-
                btn.addEventListener("click", () => {
-
                     expression += btn.innerText;
                     display.value = expression;
 
                });
 
           });
-
-          /* operator buttons */
-
           document.querySelectorAll(".op").forEach(btn => {
 
                btn.addEventListener("click", () => {
@@ -103,50 +92,27 @@
                     display.value = expression;
 
                });
-
           });
-
-          /* enter */
-
           document.getElementById("enter").addEventListener("click", () => {
-
                try {
-
                     let result = Function("return " + expression)();
-
                     output.innerText = "Output: " + result;
-
                }
-
                catch {
-
                     output.innerText = "Error: Invalid expression";
-
                     expression = "";
                     display.value = "";
-
                }
-
           });
-
-          /* clear */
-
           document.getElementById("clear").addEventListener("click", () => {
-
                expression = "";
                display.value = "";
                output.innerText = "";
-
           });
-
      </script>
-
 </body>
-
 <footer>
-
      <p class="bg-black text-white p-4 text-center">(c) Copyrights Claimed</p>
-
 </footer>
 
 </html>
