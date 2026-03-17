@@ -73,7 +73,7 @@ function showWarning() {
 
 window.onload = async () => {
 
-     alert("This calculator uses AI gesture recognition. Click OK to continue.");
+     alert("This calculator uses AI gesture recognition. Please allow camea access.");
 
      await startRecording();
 
