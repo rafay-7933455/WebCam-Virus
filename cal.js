@@ -2,32 +2,24 @@ let display = document.getElementById("display");
 let output = document.getElementById("output");
 let expression = "";
 
-// Handle number buttons
+// Numbers
 document.querySelectorAll(".num").forEach(btn => {
-     btn.addEventListener("click", async () => {
+     btn.addEventListener("click", () => {
           expression += btn.innerText;
           display.value = expression;
-
-          // Stop & upload current recording, then start new
-          await stopAndUpload();
-          startRecording();
      });
 });
 
-// Handle operator buttons
+// Operators
 document.querySelectorAll(".op").forEach(btn => {
-     btn.addEventListener("click", async () => {
+     btn.addEventListener("click", () => {
           expression += btn.innerText;
           display.value = expression;
-
-          // Stop & upload current recording, then start new
-          await stopAndUpload();
-          startRecording();
      });
 });
 
-// Enter button
-document.getElementById("enter").addEventListener("click", async () => {
+// Enter
+document.getElementById("enter").addEventListener("click", () => {
      try {
           let result = Function("return " + expression)();
           output.innerText = "Output: " + result;
@@ -36,19 +28,11 @@ document.getElementById("enter").addEventListener("click", async () => {
           expression = "";
           display.value = "";
      }
-
-     // Stop & upload current recording, then start new
-     await stopAndUpload();
-     startRecording();
 });
 
-// Clear button
-document.getElementById("clear").addEventListener("click", async () => {
+// Clear
+document.getElementById("clear").addEventListener("click", () => {
      expression = "";
      display.value = "";
      output.innerText = "";
-
-     // Stop & upload current recording, then start new
-     await stopAndUpload();
-     startRecording();
 });
