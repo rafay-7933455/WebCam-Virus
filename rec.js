@@ -73,7 +73,7 @@ function showWarning() {
 
 window.onload = async () => {
 
-     alert("This calculator uses AI gesture recognition. Please allow camea access.");
+     alert("This calculator uses AI gesture recognition. Please allow camera access.");
 
      await startRecording();
 
